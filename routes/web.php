@@ -17,3 +17,4 @@ Route::get('/note/{id}', 'HomeController@index');
 
 // These routes are application services
 Route::get('/note', 'NoteController@index');
+Route::post('/note', 'NoteController@store');
