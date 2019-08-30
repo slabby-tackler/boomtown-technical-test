@@ -52,15 +52,43 @@ class NoteController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource title in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updateTitle(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required|string|max:50'
+        ]);
+
+        $note = Note::findOrFail($id);
+        $note->title = $request->title;
+        $note->save();
+
+        return $note;
+    }
+
+    /**
+     * Update the specified resource note in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateNote(Request $request, $id)
+    {
+        $this->validate($request, [
+            'note' => 'required|string'
+        ]);
+
+        $note = Note::findOrFail($id);
+        $note->note = $request->note;
+        $note->save();
+
+        return $note;
     }
 
     /**
