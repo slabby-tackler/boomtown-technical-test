@@ -23,11 +23,39 @@ class NoteTest extends TestCase
     {
         $notes = factory(Note::class, 5)->create();
 
-        Log::debug($notes);
+        $this->get('/note')->assertStatus(200)->assertJsonCount(5);
+    }
 
-        $response = $this->get('/note');
+    public function testCreateNote() {
+        // note 1 should fail validation
+        $note1Data = [
+            'title' => '',
+            'note' => '',
+        ];
 
-        $response->assertStatus(200);
-        $response->assertJsonCount(5);
+        // note 2 should fail validation
+        $note2Data = [
+            'title' => 'Title no note',
+            'note' => '',
+        ];
+
+        // note 3 should fail validation
+        $note3Data = [
+            'title' => '',
+            'note' => 'Note no title',
+        ];
+
+        // note 4 should pass
+        $note4Data = [
+            'title' => 'title is present',
+            'note' => 'note is present',
+        ];
+
+        $this->json('POST', '/note', $note1Data)->assertStatus(422);
+        $this->json('POST', '/note', $note2Data)->assertStatus(422);
+        $this->json('POST', '/note', $note3Data)->assertStatus(422);
+
+        // new model returns 201; model should include the new id
+        $this->json('POST', '/note', $note4Data)->assertStatus(201)->assertJson(['id' => true,]);
     }
 }

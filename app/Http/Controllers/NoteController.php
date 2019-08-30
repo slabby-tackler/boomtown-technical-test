@@ -26,7 +26,18 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required|string|max:50',
+            'note' => 'required|string',
+        ]);
+
+        $note = new Note();
+        $note->title = $request->title;
+        $note->note = $request->note;
+        
+        $note->save();
+
+        return $note;
     }
 
     /**
