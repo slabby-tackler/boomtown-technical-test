@@ -123,4 +123,22 @@ class NoteTest extends TestCase
 
         $this->json('put', '/note/' . $note->id . '/note', $note3Data)->assertStatus(200)->assertJson(['note' => 'edited note']);
     }
+
+    public function testNoteDelete() {
+        $note = factory(Note::class)->create();
+
+        // this is a note that does not exist
+        $this->json('delete', '/note/7')->assertStatus(404);
+
+        $this->json('delete', '/note/' . $note->id)->assertStatus(200);
+    }
+
+    public function testGetNote() {
+        // note does not exist
+        $this->json('get', '/note/1')->assertStatus(404);
+
+        $note = factory(Note::class)->create();
+
+        $this->json('get', '/note/' . $note->id)->assertStatus(200)->assertJson(['id' => $note->id]);
+    }
 }
