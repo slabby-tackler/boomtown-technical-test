@@ -11,6 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// These routes return pages
+Route::get('/', 'HomeController@index');
+Route::get('/note/{id}', 'HomeController@index');
+
+// These routes are application services
+Route::get('/note', 'NoteController@index');

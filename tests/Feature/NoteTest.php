@@ -22,7 +22,7 @@ class NoteTest extends TestCase
     public function testGetAllNotes()
     {
         $notes = factory(Note::class, 5)->create();
-
+        
         $response = $this->get('/note');
 
         $response->assertStatus(200);
