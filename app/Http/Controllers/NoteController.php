@@ -48,7 +48,7 @@ class NoteController extends Controller
      */
     public function show($id)
     {
-        //
+        return Note::findOrFail($id);
     }
 
     /**
@@ -99,6 +99,10 @@ class NoteController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $note = Note::findOrFail($id);
+
+        $note->delete();
+
+        return $note;
     }
 }
