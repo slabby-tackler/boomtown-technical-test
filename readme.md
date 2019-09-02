@@ -21,7 +21,7 @@ Editing and deleting a note is done on the detail page. Click on the pencils to 
 Clicking on the delete button produces a confirmation, click cancel or outside the box to close without deleting.
 
 The environment file is currently contained with the project files. This allows for less steps to get up and running.
-In a normal production environment this file is not included and I would not put it include it.
+In a normal production environment this file is not included and I would not include it.
 
 ---
 
