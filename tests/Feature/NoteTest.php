@@ -135,10 +135,10 @@ class NoteTest extends TestCase
 
     public function testGetNote() {
         // note does not exist
-        $this->json('get', '/note/1')->assertStatus(404);
+        $this->json('get', '/note/1/data')->assertStatus(404);
 
         $note = factory(Note::class)->create();
 
-        $this->json('get', '/note/' . $note->id)->assertStatus(200)->assertJson(['id' => $note->id]);
+        $this->json('get', '/note/' . $note->id . '/data')->assertStatus(200)->assertJson(['id' => $note->id]);
     }
 }

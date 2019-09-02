@@ -1,3 +1,27 @@
+## App Notes
+
+** The following 2 commands are done in the project directory **
+To start up local web server:
+* php artisan server *
+
+To run tests on the application:
+* vendor/bin/phpunit *
+
+The application uses a sqlite database
+ 1. create a file for the database
+ 2. in the environment file change ** DB_DATABASE ** to the exact path of the new database file
+
+The index for all notes is at the URI '/'.
+The detail view for a note is '/note/{id}'.
+
+Editing and deleting a note is done on the detail page. Click on the pencils to enter the edit view.
+Clicking on the delete button produces a confirmation, click cancel or outside the box to close without deleting.
+
+The environment file is currently contained with the project files. This allows for less steps to get up and running.
+In a normal production environment this file is not included and I would not put it include it.
+
+---
+
 <p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
 
 <p align="center">
