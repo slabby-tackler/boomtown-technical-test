@@ -1,11 +1,14 @@
 ## App Notes
 
-** The following 2 commands are done in the project directory **
+__The following 2 commands are done in the project directory__
+
 To start up local web server:
-* php artisan server *
+
+_php artisan server_
 
 To run tests on the application:
-* vendor/bin/phpunit *
+
+_vendor/bin/phpunit_
 
 The application uses a sqlite database
  1. create a file for the database
