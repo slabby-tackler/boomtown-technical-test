@@ -3,11 +3,9 @@
 __The following 2 commands are done in the project directory__
 
 To start up local web server:
-
 _php artisan server_
 
 To run tests on the application:
-
 _vendor/bin/phpunit_
 
 The application uses a sqlite database
@@ -15,6 +13,7 @@ The application uses a sqlite database
  2. in the environment file change ** DB_DATABASE ** to the exact path of the new database file
 
 The index for all notes is at the URI '/'.
+
 The detail view for a note is '/note/{id}'.
 
 Editing and deleting a note is done on the detail page. Click on the pencils to enter the edit view.
