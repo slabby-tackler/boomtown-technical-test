@@ -16,7 +16,8 @@ The index for all notes is at the URI '/'.
 
 The detail view for a note is '/note/{id}'.
 
-Editing and deleting a note is done on the detail page. Click on the pencils to enter the edit view.
+Editing and deleting a note is done on the detail page. Click on the pencils to enter the edit view. Clicking outside of the textboxes will save changes and exit edit mode.
+
 Clicking on the delete button produces a confirmation, click cancel or outside the box to close without deleting.
 
 The environment file is currently contained with the project files. This allows for less steps to get up and running.
