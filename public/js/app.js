@@ -1777,8 +1777,8 @@ __webpack_require__.r(__webpack_exports__);
   props: ['id'],
   data: function data() {
     return {
-      newTitle: this.note.title,
-      newNote: this.note.note,
+      newTitle: '',
+      newNote: '',
       editTitle: false,
       editNote: false
     };
@@ -1795,26 +1795,94 @@ __webpack_require__.r(__webpack_exports__);
     goToNote: function goToNote(id) {
       this.$router.push('/note/' + id);
     },
-    deleteNote: function deleteNote() {// this.$store.dispatch('createNote', {title: this.newNoteTitle, note: this.newNoteNote})
-      // .then((response) => {
-      // 	this.$q.notify({
-      // 		color: 'positive',
-      // 		textColor: 'white',
-      // 		icon: 'check_circle',
-      // 		position: 'top',
-      // 		message: 'Note successfully saved',
-      // 	});
-      // 	this.newNoteDialog = false;
-      // })
-      // .catch(error => {
-      // 	this.$q.notify({
-      // 		color: 'negative',
-      // 		textColor: 'white',
-      // 		icon: 'warning',
-      // 		position: 'top',
-      // 		message: 'There was an error saving note',
-      // 	});
-      // })
+    deleteNote: function deleteNote() {
+      var _this = this;
+
+      this.$q.dialog({
+        title: 'Delete Note',
+        message: 'Are you sure you wish to delete this note?',
+        cancel: true
+      }).onOk(function () {
+        _this.$store.dispatch('deleteNote', {
+          id: _this.id
+        }).then(function (response) {
+          _this.$q.notify({
+            color: 'positive',
+            textColor: 'white',
+            icon: 'check_circle',
+            position: 'top',
+            message: 'Note successfully saved'
+          });
+
+          _this.$router.push('/');
+        })["catch"](function (error) {
+          _this.$q.notify({
+            color: 'negative',
+            textColor: 'white',
+            icon: 'warning',
+            position: 'top',
+            message: 'There was an error saving note'
+          });
+        });
+      });
+    },
+    editTitleStart: function editTitleStart() {
+      this.newTitle = this.note.title;
+      this.editTitle = true;
+    },
+    editNoteStart: function editNoteStart() {
+      this.newNote = this.note.note;
+      this.editNote = true;
+    },
+    saveTitle: function saveTitle() {
+      var _this2 = this;
+
+      this.editTitle = false;
+      this.$store.dispatch('updateNoteTitle', {
+        id: this.id,
+        title: this.newTitle
+      }).then(function (response) {
+        _this2.$q.notify({
+          color: 'positive',
+          textColor: 'white',
+          icon: 'check_circle',
+          position: 'top',
+          message: 'Title successfully saved'
+        });
+      })["catch"](function (error) {
+        _this2.$q.notify({
+          color: 'negative',
+          textColor: 'white',
+          icon: 'warning',
+          position: 'top',
+          message: 'There was an error saving title'
+        });
+      });
+    },
+    saveNote: function saveNote() {
+      var _this3 = this;
+
+      this.editNote = false;
+      this.$store.dispatch('updateNoteNote', {
+        id: this.id,
+        note: this.newNote
+      }).then(function (response) {
+        _this3.$q.notify({
+          color: 'positive',
+          textColor: 'white',
+          icon: 'check_circle',
+          position: 'top',
+          message: 'Note successfully saved'
+        });
+      })["catch"](function (error) {
+        _this3.$q.notify({
+          color: 'negative',
+          textColor: 'white',
+          icon: 'warning',
+          position: 'top',
+          message: 'There was an error saving note'
+        });
+      });
     }
   }
 });
@@ -3391,85 +3459,105 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "row q-pt-md q-px-md" }, [
-                _c("div", { staticClass: "col-12 text-subtitle2" }, [
-                  _vm._v("\n\t\t\t\t\t\t\tTitle ")
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: !_vm.editNote,
-                        expression: "!editNote"
-                      }
-                    ],
-                    staticClass: "col-12"
-                  },
-                  [
-                    _vm._v(
-                      "\n\t\t\t\t\t\t\t" +
-                        _vm._s(_vm.note.title) +
-                        "\n\t\t\t\t\t\t"
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c("div", {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.editNote,
-                      expression: "editNote"
-                    }
-                  ],
-                  staticClass: "col-12"
-                })
-              ]),
+              _vm.note !== undefined
+                ? _c("div", { staticClass: "row q-pt-md q-px-md" }, [
+                    _c(
+                      "div",
+                      { staticClass: "col-12 text-subtitle2" },
+                      [
+                        _vm._v("\n\t\t\t\t\t\t\tTitle "),
+                        !_vm.editTitle
+                          ? _c("q-icon", {
+                              attrs: { name: "create" },
+                              on: { click: _vm.editTitleStart }
+                            })
+                          : _vm._e()
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    !_vm.editTitle
+                      ? _c("div", { staticClass: "col-12" }, [
+                          _vm._v(
+                            "\n\t\t\t\t\t\t\t" +
+                              _vm._s(_vm.note.title) +
+                              "\n\t\t\t\t\t\t"
+                          )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.editTitle
+                      ? _c(
+                          "div",
+                          { staticClass: "col-12" },
+                          [
+                            _c("q-input", {
+                              attrs: { autofocus: "" },
+                              on: { focusout: _vm.saveTitle },
+                              model: {
+                                value: _vm.newTitle,
+                                callback: function($$v) {
+                                  _vm.newTitle = $$v
+                                },
+                                expression: "newTitle"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      : _vm._e()
+                  ])
+                : _vm._e(),
               _vm._v(" "),
-              _c("div", { staticClass: "row q-pt-md q-px-md" }, [
-                _c("div", { staticClass: "col-12 text-subtitle2" }, [
-                  _vm._v("\n\t\t\t\t\t\t\tNote ")
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: !_vm.editNote,
-                        expression: "!editNote"
-                      }
-                    ],
-                    staticClass: "col-12"
-                  },
-                  [
-                    _vm._v(
-                      "\n\t\t\t\t\t\t\t" +
-                        _vm._s(_vm.note.note) +
-                        "\n\t\t\t\t\t\t"
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c("div", {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.editNote,
-                      expression: "editNote"
-                    }
-                  ],
-                  staticClass: "col-12"
-                })
-              ])
+              _vm.note !== undefined
+                ? _c("div", { staticClass: "row q-pt-md q-px-md" }, [
+                    _c(
+                      "div",
+                      { staticClass: "col-12 text-subtitle2" },
+                      [
+                        _vm._v("\n\t\t\t\t\t\t\tNote "),
+                        !_vm.editNote
+                          ? _c("q-icon", {
+                              attrs: { name: "create" },
+                              on: { click: _vm.editNoteStart }
+                            })
+                          : _vm._e()
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    !_vm.editNote
+                      ? _c("div", { staticClass: "col-12" }, [
+                          _vm._v(
+                            "\n\t\t\t\t\t\t\t" +
+                              _vm._s(_vm.note.note) +
+                              "\n\t\t\t\t\t\t"
+                          )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.editNote
+                      ? _c(
+                          "div",
+                          { staticClass: "col-12" },
+                          [
+                            _c("q-input", {
+                              attrs: { type: "textarea", autofocus: "" },
+                              on: { focusout: _vm.saveNote },
+                              model: {
+                                value: _vm.newNote,
+                                callback: function($$v) {
+                                  _vm.newNote = $$v
+                                },
+                                expression: "newNote"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      : _vm._e()
+                  ])
+                : _vm._e()
             ])
           ])
         ])
@@ -20097,6 +20185,15 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     notes: {}
   },
   mutations: {
+    NOTE_DELETE: function NOTE_DELETE(state, note) {
+      vue__WEBPACK_IMPORTED_MODULE_1___default.a["delete"](state.notes, note.id);
+    },
+    NOTE_UPDATE_NOTE: function NOTE_UPDATE_NOTE(state, note) {
+      state.notes[note.id].note = note.note;
+    },
+    NOTE_UPDATE_TITLE: function NOTE_UPDATE_TITLE(state, note) {
+      state.notes[note.id].title = note.title;
+    },
     NOTE_ADD: function NOTE_ADD(state, note) {
       vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(state.notes, note.id, note);
     },
@@ -20123,9 +20220,33 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
         return Promise.reject(error);
       });
     },
-    updateNoteTitle: function updateNoteTitle() {},
-    updateNoteNote: function updateNoteNote() {},
-    deleteNote: function deleteNote() {}
+    updateNoteTitle: function updateNoteTitle(_ref3, note) {
+      var commit = _ref3.commit;
+      return axios.put('/note/' + note.id + '/title', note).then(function (response) {
+        commit('NOTE_UPDATE_TITLE', response.data);
+        return response;
+      })["catch"](function (error) {
+        return Promise.reject(error);
+      });
+    },
+    updateNoteNote: function updateNoteNote(_ref4, note) {
+      var commit = _ref4.commit;
+      return axios.put('/note/' + note.id + '/note', note).then(function (response) {
+        commit('NOTE_UPDATE_NOTE', response.data);
+        return response;
+      })["catch"](function (error) {
+        return Promise.reject(error);
+      });
+    },
+    deleteNote: function deleteNote(_ref5, note) {
+      var commit = _ref5.commit;
+      return axios["delete"]('/note/' + note.id).then(function (response) {
+        commit('NOTE_DELETE', response.data);
+        return response;
+      })["catch"](function (error) {
+        return Promise.reject(error);
+      });
+    }
   },
   getters: {
     getNotes: function getNotes(state) {

@@ -8,6 +8,15 @@ const store = new Vuex.Store({
 		notes: {},
 	},
 	mutations: {
+		NOTE_DELETE: (state, note) => {
+			Vue.delete(state.notes, note.id);
+		},
+		NOTE_UPDATE_NOTE: (state, note) => {
+			state.notes[note.id].note = note.note;
+		},
+		NOTE_UPDATE_TITLE: (state, note) => {
+			state.notes[note.id].title = note.title;
+		},
 		NOTE_ADD: (state, note) => {
 			Vue.set(state.notes, note.id, note);
 		},
@@ -36,14 +45,38 @@ const store = new Vuex.Store({
 				return Promise.reject(error);
 			});
 		},
-		updateNoteTitle() {
+		updateNoteTitle({ commit }, note) {
+			return axios.put('/note/' + note.id + '/title', note)
+			.then(response => {
+				commit('NOTE_UPDATE_TITLE', response.data);
 
+				return response;
+			})
+			.catch(error => {
+				return Promise.reject(error);
+			})
 		},
-		updateNoteNote() {
-
+		updateNoteNote({ commit }, note) {
+			return axios.put('/note/' + note.id + '/note', note)
+			.then(response => {
+				commit('NOTE_UPDATE_NOTE', response.data);
+				
+				return response;
+			})
+			.catch(error => {
+				return Promise.reject(error);
+			})
 		},
-		deleteNote() {
+		deleteNote({ commit }, note) {
+			return axios.delete('/note/' + note.id)
+			.then(response => {
+				commit('NOTE_DELETE', response.data);
 
+				return response;
+			})
+			.catch(error => {
+				return Promise.reject(error);
+			})
 		}
 	},
 	getters: {

@@ -12,26 +12,26 @@
 								<q-btn color="negative" label="delete" @click="deleteNote" tile="Delete Note" />
 							</div>
 						</div>
-						<div class="row q-pt-md q-px-md">
+						<div class="row q-pt-md q-px-md" v-if="note!==undefined">
 							<div class="col-12 text-subtitle2">
-								Title <!-- TODO: icon for editing title -->
+								Title <q-icon name="create" @click="editTitleStart" v-if="!editTitle" />
 							</div>
-							<div class="col-12" v-show="!editNote">
+							<div class="col-12" v-if="!editTitle">
 								{{ note.title }}
 							</div>
-							<div class="col-12" v-show="editNote">
-								<!-- TODO: input box for title edit -->
+							<div class="col-12" v-if="editTitle">
+								<q-input v-model="newTitle" @focusout="saveTitle" autofocus />
 							</div>
 						</div>
-						<div class="row q-pt-md q-px-md">
+						<div class="row q-pt-md q-px-md" v-if="note!==undefined">
 							<div class="col-12 text-subtitle2">
-								Note <!-- TODO: icon for editing title -->
+								Note <q-icon name="create" @click="editNoteStart" v-if="!editNote" />
 							</div>
-							<div class="col-12" v-show="!editNote">
+							<div class="col-12" v-if="!editNote">
 								{{ note.note }}
 							</div>
-							<div class="col-12" v-show="editNote">
-								<!-- TODO: input box for title edit -->
+							<div class="col-12" v-if="editNote">
+								<q-input type="textarea" v-model="newNote" autofocus @focusout="saveNote" />
 							</div>
 						</div>
 					</div>
@@ -46,8 +46,8 @@
 		props: ['id'],
 		data() {
 			return {
-				newTitle: this.note.title,
-				newNote: this.note.note,
+				newTitle: '',
+				newNote: '',
 				editTitle: false,
 				editNote: false,
 			}
@@ -65,28 +65,92 @@
 				this.$router.push('/note/' + id);
 			},
 			deleteNote() {
-				// this.$store.dispatch('createNote', {title: this.newNoteTitle, note: this.newNoteNote})
-				// .then((response) => {
-				// 	this.$q.notify({
-				// 		color: 'positive',
-				// 		textColor: 'white',
-				// 		icon: 'check_circle',
-				// 		position: 'top',
-				// 		message: 'Note successfully saved',
-				// 	});
+				this.$q.dialog({
+					title: 'Delete Note',
+					message: 'Are you sure you wish to delete this note?',
+					cancel: true,
+				})
+				.onOk(() => {
+					this.$store.dispatch('deleteNote', { id: this.id })
+					.then((response) => {
+						this.$q.notify({
+							color: 'positive',
+							textColor: 'white',
+							icon: 'check_circle',
+							position: 'top',
+							message: 'Note successfully saved',
+						});
 
-				// 	this.newNoteDialog = false;
-				// })
-				// .catch(error => {
-				// 	this.$q.notify({
-				// 		color: 'negative',
-				// 		textColor: 'white',
-				// 		icon: 'warning',
-				// 		position: 'top',
-				// 		message: 'There was an error saving note',
-				// 	});
-				// })
+						this.$router.push('/');
+					})
+					.catch(error => {
+						this.$q.notify({
+							color: 'negative',
+							textColor: 'white',
+							icon: 'warning',
+							position: 'top',
+							message: 'There was an error saving note',
+						});
+					})
+				})
+				
 			},
+			editTitleStart() {
+				this.newTitle = this.note.title;
+
+				this.editTitle = true;
+			},
+			editNoteStart() {
+				this.newNote = this.note.note;
+
+				this.editNote = true;
+			},
+			saveTitle() {
+				this.editTitle = false;
+
+				this.$store.dispatch('updateNoteTitle', { id: this.id, title: this.newTitle })
+				.then(response => {
+					this.$q.notify({
+						color: 'positive',
+						textColor: 'white',
+						icon: 'check_circle',
+						position: 'top',
+						message: 'Title successfully saved',
+					})
+				})
+				.catch(error => {
+					this.$q.notify({
+						color: 'negative',
+						textColor: 'white',
+						icon: 'warning',
+						position: 'top',
+						message: 'There was an error saving title',
+					});
+				})
+			},
+			saveNote() {
+				this.editNote = false;
+
+				this.$store.dispatch('updateNoteNote', { id: this.id, note: this.newNote })
+				.then(response => {
+					this.$q.notify({
+						color: 'positive',
+						textColor: 'white',
+						icon: 'check_circle',
+						position: 'top',
+						message: 'Note successfully saved',
+					})
+				})
+				.catch(error => {
+					this.$q.notify({
+						color: 'negative',
+						textColor: 'white',
+						icon: 'warning',
+						position: 'top',
+						message: 'There was an error saving note',
+					});
+				})
+			}
 		}
 	}
 </script>
