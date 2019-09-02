@@ -1,12 +1,20 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
-require('./bootstrap');
-
+window.axios = require('axios');
 window.Vue = require('vue');
+window.Vuex = require('vuex');
+window.VueRouter = require('vue-router').default;
+
+window.Quasar = require('quasar/dist/quasar.umd.min.js');
+
+require('quasar-extras/material-icons/material-icons.css');
+require('quasar/dist/quasar.min.css');
+
+import store from './store.js';
+import router from './router.js';
+
+Vue.use(Quasar);
+
+let token = document.head.querySelector('meta[name="csrf-token"]');
+window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 
 /**
  * The following block of code may be used to automatically register your
@@ -29,4 +37,6 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 const app = new Vue({
     el: '#app',
+    store,
+    router,
 });
