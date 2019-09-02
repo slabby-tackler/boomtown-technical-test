@@ -10,7 +10,7 @@ _vendor/bin/phpunit_
 
 The application uses a sqlite database
  1. create a file for the database
- 2. in the environment file change ** DB_DATABASE ** to the exact path of the new database file
+ 2. in the environment file change __DB_DATABASE__ to the exact path of the new database file
 
 The index for all notes is at the URI '/'.
 
