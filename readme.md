@@ -16,6 +16,10 @@ The index for all notes is at the URI '/'.
 
 The detail view for a note is '/note/{id}'.
 
+The note table mainly contains 2 fields, title is more for organizational purposes. It gives for a separations of the different notes. THe other field is the note field. This is where the note actually belongs.
+
+To create a note click on the '+' in the top right hand corner of the index page. Both fields are required and will throw an error if they are empty. Title is limited to 50 characters.
+
 Editing and deleting a note is done on the detail page. Click on the pencils to enter the edit view. Clicking outside of the textboxes will save changes and exit edit mode.
 
 Clicking on the delete button produces a confirmation, click cancel or outside the box to close without deleting.
