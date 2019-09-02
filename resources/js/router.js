@@ -10,7 +10,7 @@ const router = new VueRouter({
 	mode: 'history',
 	routes:[
 		{path: '/', component: Notes },
-		{path: '/note/:id', component: NoteDetail },
+		{path: '/note/:id', component: NoteDetail, props: true },
 	],
 });
 

@@ -44,7 +44,7 @@
 						</div>
 						<div class="row">
 							<div class="col-12">
-								<q-input stack-label label="note" v-model="newNoteNote" />
+								<q-input type="textarea" stack-label label="note" v-model="newNoteNote" />
 							</div>
 						</div>
 						<div class="row q-pa-sm">
@@ -82,10 +82,30 @@
 		},
 		methods: {
 			goToNote(id) {
-
+				this.$router.push('/note/' + id);
 			},
 			saveNote() {
-				// TODO: make call to server to save note
+				this.$store.dispatch('createNote', {title: this.newNoteTitle, note: this.newNoteNote})
+				.then((response) => {
+					this.$q.notify({
+						color: 'positive',
+						textColor: 'white',
+						icon: 'check_circle',
+						position: 'top',
+						message: 'Note successfully saved',
+					});
+
+					this.newNoteDialog = false;
+				})
+				.catch(error => {
+					this.$q.notify({
+						color: 'negative',
+						textColor: 'white',
+						icon: 'warning',
+						position: 'top',
+						message: 'There was an error saving note',
+					});
+				})
 			},
 			cancelNote() {
 				this.newNoteTitle = '';

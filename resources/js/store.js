@@ -8,18 +8,33 @@ const store = new Vuex.Store({
 		notes: {},
 	},
 	mutations: {
+		NOTE_ADD: (state, note) => {
+			Vue.set(state.notes, note.id, note);
+		},
 		NOTE_COLLECTION_ADD: (state, notes) => {
-			for(note in notes) {
-				state.notes[note.id] = note;
+			for(let index in notes) {
+				let note = notes[index];
+				Vue.set(state.notes, note.id, note);
 			}
 		}
 	},
 	actions: {
-		getNotes() {
-
+		getNotes({ commit }) {
+			return axios.get('/note')
+			.then(response => {
+				commit('NOTE_COLLECTION_ADD', response.data);
+			});
 		},
-		createNote() {
+		createNote({ commit }, noteData) {
+			return axios.post('/note', noteData)
+			.then(response => {
+				commit('NOTE_ADD', response.data);
 
+				return response;
+			})
+			.catch(error => {
+				return Promise.reject(error);
+			});
 		},
 		updateNoteTitle() {
 
